@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         id="WebApp_ID" version="3.0">
+    <display-name>web03</display-name>
+
+    <!-- 서블릿 선언 -->
+    <servlet>
+        <!-- 서블릿 별명 설정 -->
+        <servlet-name>Hello</servlet-name>
+        <!-- 패키지를 포함한 서블릿 클래스 명 -->
+        <servlet-class>lesson03.servlets.HelloWorld</servlet-class>
+    </servlet>
+<!--    <servlet>-->
+<!--        <servlet-name>Calculator</servlet-name>-->
+<!--        <servlet-class>lesson03.servlets.CalculatorServlet</servlet-class>-->
+<!--    </servlet>-->
+
+
+    <!-- 서블릿을 URL과 연결 -->
+    <servlet-mapping>
+        <!-- 정의한 별명으로 서블릿 이름 설정 -->
+        <servlet-name>Hello</servlet-name>
+        <!-- 서블릿을 요청할 때, 클라이언트가 사용할 URL 을 설정 -->
+        <url-pattern>/Hello</url-pattern>
+    </servlet-mapping>
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>Calculator</servlet-name>-->
+<!--        <url-pattern>/calc</url-pattern>-->
+<!--    </servlet-mapping>-->
+
+
+    <!--웰컴 파일 리스트 정의-->
+    <welcome-file-list>
+        <!-- 웰컴 파일 선언 (순차적으로 실행) -->
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.htm</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>default.html</welcome-file>
+        <welcome-file>default.htm</welcome-file>
+        <welcome-file>default.jsp</welcome-file>
+    </welcome-file-list>
+</web-app>
