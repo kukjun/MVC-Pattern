@@ -2,8 +2,6 @@ package spms.servlets;
 
 import spms.dao.MemberDao;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

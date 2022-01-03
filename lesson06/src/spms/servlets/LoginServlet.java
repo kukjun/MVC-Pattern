@@ -4,7 +4,6 @@ import spms.dao.MemberDao;
 import spms.vo.Member;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

@@ -3,7 +3,6 @@ package spms.servlets;
 import spms.dao.MemberDao;
 import spms.vo.Member;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -47,8 +46,8 @@ public class MemberUpdateServlet extends HttpServlet {
 
         try {
             Member member = (Member) req.getAttribute("member");
-            MemberDao memberDao = (MemberDao) sc.getAttribute("memberDao");
-            memberDao.update(member);
+            MemberDao MemberDao = (MemberDao) sc.getAttribute("memberDao");
+            MemberDao.update(member);
 
             req.setAttribute("viewUrI", "redirect:list.do");
         } catch (Exception e) {

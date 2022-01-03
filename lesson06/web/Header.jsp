@@ -15,6 +15,3 @@
            href="${request.getContextPath()}/auth/logout.do">로그아웃</a>
     </span>
 </div>
-<%
-    System.out.println("Header");
-%>

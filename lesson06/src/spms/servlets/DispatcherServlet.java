@@ -1,7 +1,6 @@
 package spms.servlets;
 
 import spms.Controller;
-import spms.controls.*;
 import spms.vo.Member;
 
 import javax.servlet.RequestDispatcher;
@@ -28,15 +27,15 @@ public class DispatcherServlet extends HttpServlet {
       ServletContext sc = this.getServletContext();
 
       HashMap<String, Object> model = new HashMap<>();
-      model.put("memberDao", sc.getAttribute("memberDao"));
+      // memberDao 객체는 더이상 Map 객체에 담을 필요가 없다.
+//      model.put("memberDao", sc.getAttribute("memberDao"));
 
-      String pageControllerPath = null;
-      Controller pageController = null;
+      // 이 보관소에서 페이지 컨트롤러를 꺼낼 때는 서블릿 URL 을 사용한다.
+      Controller pageController = (Controller) sc.getAttribute(servletPath);
 
+      // 이 보관소에서 페이지 컨트롤러가 사용할 데이터를 준비하는 부분을 제외하고는 모두 제거한다.
       if ("/member/list.do".equals(servletPath)) {
-        pageController = new MemberListController();
       } else if ("/member/add.do".equals(servletPath)) {
-        pageController = new MemberAddController();
         if (req.getParameter("email") != null) {
           model.put("member", new Member()
                   .setEmail(req.getParameter("email"))
@@ -44,7 +43,6 @@ public class DispatcherServlet extends HttpServlet {
                   .setName(req.getParameter("name")));
         }
       } else if ("/member/update.do".equals(servletPath)) {
-        pageController = new MemberUpdateController();
         // "no" 정보를 맵 객체에 담는다.
         model.put("no", req.getParameter("no"));
         if (req.getParameter("email") != null) {
@@ -55,11 +53,9 @@ public class DispatcherServlet extends HttpServlet {
                   .setName(req.getParameter("name")));
         }
       } else if ("/member/delete.do".equals(servletPath)) {
-        pageController = new MemberDeleteController();
         // 맵 객체에 "no"정보를 담는다.
         model.put("no", req.getParameter("no"));
       } else if ("/auth/login.do".equals(servletPath)) {
-        pageController = new LoginController();
         // 맵 객체에 member 객체 정보와 session 객체를 담는다.
         if (req.getParameter("email") != null) {
           model.put("member", new Member()
@@ -68,7 +64,6 @@ public class DispatcherServlet extends HttpServlet {
           model.put("session", req.getSession());
         }
       } else if ("/auth/logout.do".equals(servletPath)) {
-        pageController = new LogoutController();
         // 맵 객체에 session 객체를 담는다.
         model.put("session", req.getSession());
       }

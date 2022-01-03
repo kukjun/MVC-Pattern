@@ -14,9 +14,6 @@
 </head>
 <body>
 <jsp:include page="/Header.jsp"/>
-<%
-    System.out.println("List");
-%>
 <h1>회원 목록</h1>
 <p><a href="add.do">신규 회원</a></p>
 <c:forEach var="member" items="${members}">

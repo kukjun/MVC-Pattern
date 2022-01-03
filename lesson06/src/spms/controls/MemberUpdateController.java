@@ -2,15 +2,24 @@ package spms.controls;
 
 import spms.Controller;
 import spms.dao.MemberDao;
+import spms.dao.PsqlMemberDao;
 import spms.vo.Member;
 
 import java.util.Map;
 
 public class MemberUpdateController implements Controller {
+
+  MemberDao memberDao;
+
+  public MemberUpdateController setMemberDao(MemberDao memberDao) {
+    this.memberDao = memberDao;
+    return this;
+  }
+
   @Override
   public String execute(Map<String, Object> model) throws Exception {
-    MemberDao memberDao = (MemberDao) model.get("memberDao");
     Member member;
+    // model 에서 member 라는 키의 값이 없으면
     if (model.get("member") == null) {
       // model 로 부터 수정할 맴버 객체 번호를 가져와서 데이터베이스에 조회
       member = memberDao.selectOne(Integer.parseInt(String.valueOf(model.get("no"))));
@@ -19,7 +28,7 @@ public class MemberUpdateController implements Controller {
       // 업데이트 URL 반환
       return "/member/MemberUpdate.jsp";
     } else {
-      // member 객체를 가져와서 Dao를 통해 업데이트 요청
+      // member 객체를 가져와서 Dao 를 통해 업데이트 요청
       member = (Member) model.get("member");
       memberDao.update(member);
 
