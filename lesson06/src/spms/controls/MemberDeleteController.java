@@ -1,12 +1,13 @@
 package spms.controls;
 
 import spms.Controller;
+import spms.bind.DataBinding;
 import spms.dao.MemberDao;
 import spms.dao.PsqlMemberDao;
 
 import java.util.Map;
 
-public class MemberDeleteController implements Controller {
+public class MemberDeleteController implements Controller, DataBinding {
 
   MemberDao memberDao;
 
@@ -22,5 +23,12 @@ public class MemberDeleteController implements Controller {
     memberDao.delete(Integer.parseInt(String.valueOf(model.get("no"))));
     // 회원 목록으로 리다이렉트 URL 반환
     return "redirect:list.do";
+  }
+
+  @Override
+  public Object[] getDataBinders() {
+    return new Object[]{
+            "member", spms.vo.Member.class
+    };
   }
 }

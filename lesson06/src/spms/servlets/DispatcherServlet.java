@@ -1,11 +1,14 @@
 package spms.servlets;
 
 import spms.Controller;
+import spms.bind.DataBinding;
+import spms.bind.ServletRequestDataBinder;
 import spms.vo.Member;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +17,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 // 프런트 컨트롤러도 서블릿이기 때문에 HttpServlet 을 상속받는다.
-// /member/list.do, /member/add.do 와 같이 .do 로 끝나느 모든 URL 요청은 이 서블릿을 거친다.
+// /member/list.do, /member/add.do 와 같이 .do 로 끝나는 모든 URL 요청은 이 서블릿을 거친다.
 @WebServlet("*.do")
 public class DispatcherServlet extends HttpServlet {
 
@@ -27,45 +30,13 @@ public class DispatcherServlet extends HttpServlet {
       ServletContext sc = this.getServletContext();
 
       HashMap<String, Object> model = new HashMap<>();
-      // memberDao 객체는 더이상 Map 객체에 담을 필요가 없다.
-//      model.put("memberDao", sc.getAttribute("memberDao"));
+      model.put("session", req.getSession());
 
-      // 이 보관소에서 페이지 컨트롤러를 꺼낼 때는 서블릿 URL 을 사용한다.
       Controller pageController = (Controller) sc.getAttribute(servletPath);
 
-      // 이 보관소에서 페이지 컨트롤러가 사용할 데이터를 준비하는 부분을 제외하고는 모두 제거한다.
-      if ("/member/list.do".equals(servletPath)) {
-      } else if ("/member/add.do".equals(servletPath)) {
-        if (req.getParameter("email") != null) {
-          model.put("member", new Member()
-                  .setEmail(req.getParameter("email"))
-                  .setPassword(req.getParameter("password"))
-                  .setName(req.getParameter("name")));
-        }
-      } else if ("/member/update.do".equals(servletPath)) {
-        // "no" 정보를 맵 객체에 담는다.
-        model.put("no", req.getParameter("no"));
-        if (req.getParameter("email") != null) {
-          // 맵 객체에 member 객체를 담는다.
-          model.put("member", new Member()
-                  .setNo(Integer.parseInt(req.getParameter("no")))
-                  .setEmail(req.getParameter("email"))
-                  .setName(req.getParameter("name")));
-        }
-      } else if ("/member/delete.do".equals(servletPath)) {
-        // 맵 객체에 "no"정보를 담는다.
-        model.put("no", req.getParameter("no"));
-      } else if ("/auth/login.do".equals(servletPath)) {
-        // 맵 객체에 member 객체 정보와 session 객체를 담는다.
-        if (req.getParameter("email") != null) {
-          model.put("member", new Member()
-                  .setEmail(req.getParameter("email"))
-                  .setPassword(req.getParameter("password")));
-          model.put("session", req.getSession());
-        }
-      } else if ("/auth/logout.do".equals(servletPath)) {
-        // 맵 객체에 session 객체를 담는다.
-        model.put("session", req.getSession());
+      // VO 객체를 생성하고 Map 객체에 넣는 부분을 자동화
+      if (pageController instanceof DataBinding) {
+        prepareRequestsData(req, model, (DataBinding) pageController);
       }
 
       String viewUrl = pageController.execute(model);
@@ -87,4 +58,27 @@ public class DispatcherServlet extends HttpServlet {
       rd.forward(req, resp);
     }
   }
+
+  private void prepareRequestsData(HttpServletRequest request,
+                                   HashMap<String, Object> model, DataBinding dataBinding) throws Exception {
+    // 페이지 컨트롤러에게 필요한 데이터가 무엇인지 가져온다.
+    Object[] dataBinders = dataBinding.getDataBinders();
+
+    // 배열에서 꺼낸 값을 보관할 임시 변수 준비
+    String dataName;
+    Class<?> dataType;
+    Object dataObj;
+
+    // 데이터 이름과 데이터 타입을 반복해서 꺼냄
+    for (int i = 0; i < dataBinders.length; i += 2) {
+      dataName = (String) dataBinders[i];
+      dataType = (Class<?>) dataBinders[i + 1];
+      // dataType, dataName 과 일치하는 요청 매개변수를 찾고 해당 클래스의 인스턴스를 생성한다.
+      // 찾은 매개변수 값을 인스턴스에 저장하며 그 인스턴스를 반환한다.
+      dataObj = ServletRequestDataBinder.bind(request, dataType, dataName);
+      model.put(dataName, dataObj);
+
+    }
+  }
+
 }

@@ -1,14 +1,14 @@
 package spms.controls;
 
 import spms.Controller;
+import spms.bind.DataBinding;
 import spms.dao.MemberDao;
-import spms.dao.PsqlMemberDao;
 import spms.vo.Member;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 
-public class LoginController implements Controller {
+public class LoginController implements Controller, DataBinding {
 
   MemberDao memberDao;
 
@@ -37,4 +37,12 @@ public class LoginController implements Controller {
       }
     }
   }
+
+  @Override
+  public Object[] getDataBinders() {
+    return new Object[]{
+            "member", spms.vo.Member.class
+    };
+  }
+
 }

@@ -1,13 +1,14 @@
 package spms.controls;
 
 import spms.Controller;
+import spms.bind.DataBinding;
 import spms.dao.MemberDao;
 import spms.dao.PsqlMemberDao;
 import spms.vo.Member;
 
 import java.util.Map;
 
-public class MemberUpdateController implements Controller {
+public class MemberUpdateController implements Controller, DataBinding {
 
   MemberDao memberDao;
 
@@ -35,5 +36,12 @@ public class MemberUpdateController implements Controller {
       // 회원 목록 URL 로 리다이렉트 요청 URL 반환
       return "redirect:list.do";
     }
+  }
+
+  @Override
+  public Object[] getDataBinders() {
+    return new Object[]{
+            "member", spms.vo.Member.class
+    };
   }
 }
