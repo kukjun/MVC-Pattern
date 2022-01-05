@@ -1,11 +1,13 @@
 package spms.controls;
 
 import spms.Controller;
+import spms.annotation.Component;
 import spms.dao.MemberDao;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 
+@Component("/auth/logout.do")
 public class LogoutController implements Controller {
 
   @Override

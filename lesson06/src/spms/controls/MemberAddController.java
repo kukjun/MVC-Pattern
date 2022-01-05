@@ -1,12 +1,13 @@
 package spms.controls;
 
 import spms.Controller;
+import spms.annotation.Component;
 import spms.bind.DataBinding;
 import spms.dao.MemberDao;
 import spms.vo.Member;
 
 import java.util.Map;
-
+@Component("/member/add.do")
 public class MemberAddController implements Controller , DataBinding {
 
   MemberDao memberDao;

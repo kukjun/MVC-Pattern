@@ -1,13 +1,14 @@
 package spms.controls;
 
 import spms.Controller;
+import spms.annotation.Component;
 import spms.bind.DataBinding;
 import spms.dao.MemberDao;
 import spms.dao.PsqlMemberDao;
 import spms.vo.Member;
 
 import java.util.Map;
-
+@Component("/member/delete.do")
 public class MemberDeleteController implements Controller, DataBinding {
 
   MemberDao memberDao;

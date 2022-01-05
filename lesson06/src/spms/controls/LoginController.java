@@ -1,6 +1,7 @@
 package spms.controls;
 
 import spms.Controller;
+import spms.annotation.Component;
 import spms.bind.DataBinding;
 import spms.dao.MemberDao;
 import spms.vo.Member;
@@ -8,6 +9,7 @@ import spms.vo.Member;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 
+@Component ("/auth/login.do")
 public class LoginController implements Controller, DataBinding {
 
   MemberDao memberDao;
