@@ -1,8 +1,10 @@
 package spms.servlets;
 
+import context.ApplicationContext;
 import spms.Controller;
 import spms.bind.DataBinding;
 import spms.bind.ServletRequestDataBinder;
+import spms.listeners.ContextLoaderListener;
 import spms.vo.Member;
 
 import javax.servlet.RequestDispatcher;
@@ -27,12 +29,17 @@ public class DispatcherServlet extends HttpServlet {
     String servletPath = req.getServletPath();
 
     try {
-      ServletContext sc = this.getServletContext();
+//      ServletContext sc = this.getServletContext();
+      ApplicationContext ctx = ContextLoaderListener.getApplicationContext();
 
       HashMap<String, Object> model = new HashMap<>();
       model.put("session", req.getSession());
 
-      Controller pageController = (Controller) sc.getAttribute(servletPath);
+      Controller pageController = (Controller) ctx.getBean(servletPath);
+
+      if (pageController == null) {
+        throw new Exception("요청한 서비스를 찾을 수 없습니다.");
+      }
 
       // VO 객체를 생성하고 Map 객체에 넣는 부분을 자동화
       if (pageController instanceof DataBinding) {

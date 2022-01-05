@@ -4,6 +4,7 @@ import spms.Controller;
 import spms.bind.DataBinding;
 import spms.dao.MemberDao;
 import spms.dao.PsqlMemberDao;
+import spms.vo.Member;
 
 import java.util.Map;
 
@@ -18,9 +19,11 @@ public class MemberDeleteController implements Controller, DataBinding {
 
   @Override
   public String execute(Map<String, Object> model) throws Exception {
+    Member member = (Member) model.get("member");
 
     // 맵 객체로부터 DAO 와 no 를 가져와서 DAO 의 메소드를 호출
-    memberDao.delete(Integer.parseInt(String.valueOf(model.get("no"))));
+    memberDao.delete(member.getNo());
+
     // 회원 목록으로 리다이렉트 URL 반환
     return "redirect:list.do";
   }

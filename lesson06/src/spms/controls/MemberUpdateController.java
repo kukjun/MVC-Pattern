@@ -19,11 +19,11 @@ public class MemberUpdateController implements Controller, DataBinding {
 
   @Override
   public String execute(Map<String, Object> model) throws Exception {
-    Member member;
+    Member member = (Member)model.get("member");
     // model 에서 member 라는 키의 값이 없으면
-    if (model.get("member") == null) {
+    if (member.getEmail() == null ) {
       // model 로 부터 수정할 맴버 객체 번호를 가져와서 데이터베이스에 조회
-      member = memberDao.selectOne(Integer.parseInt(String.valueOf(model.get("no"))));
+      member = memberDao.selectOne(member.getNo());
       // Map 객체에 저장
       model.put("member", member);
       // 업데이트 URL 반환
