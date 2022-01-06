@@ -1,5 +1,6 @@
 package spms.dao;
 
+import spms.annotation.Component;
 import spms.vo.Member;
 
 import javax.sql.DataSource;

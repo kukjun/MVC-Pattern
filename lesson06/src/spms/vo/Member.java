@@ -31,7 +31,7 @@ public class Member {
     }
 
     public Date getModifiedDate() {
-        return modifiedDate;
+        return    modifiedDate;
     }
 
     public Member setNo(int no) {
